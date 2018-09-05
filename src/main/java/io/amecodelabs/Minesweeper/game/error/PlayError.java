@@ -5,6 +5,6 @@ import java.util.function.Consumer;
 import io.amecodelabs.Minesweeper.game.MinesWeeperException;
 
 public interface PlayError extends Consumer<MinesWeeperException> {
-	//
-	//
+	// Interfaz Marcadora
+	// control error by user input
 }
