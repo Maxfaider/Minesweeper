@@ -1,7 +1,5 @@
 package io.amecodelabs.Minesweeper.game;
 
-import java.util.logging.Logger;
-
 import io.amecodelabs.Minesweeper.game.error.InvalidCellError;
 import io.amecodelabs.Minesweeper.game.error.MarkerCellError;
 import io.amecodelabs.Minesweeper.game.error.VisitedCellError;
@@ -9,7 +7,6 @@ import io.amecodelabs.Minesweeper.game.events.LoserListener;
 import io.amecodelabs.Minesweeper.game.events.WinnerListener;
 
 public class BoardBuilder {
-	private Logger log = Logger.getLogger(this.getClass().getName());
 	private WinnerListener winnerListener;
 	private LoserListener loserListener;
 	private InvalidCellError invalidCellError;
@@ -46,7 +43,6 @@ public class BoardBuilder {
 		for(int i = 0; i < cells.length; i++) 
 			for(int j = 0; j < cells[i].length; j++)
 				cells[i][j] = new Cell_Impl(new RowAndColumn(i, j));
-		log.info("initialize cells");
 	}
 	
 	private void insertMines(Cell[][] cells) {
@@ -59,14 +55,12 @@ public class BoardBuilder {
 			} while(cells[rowRandom][columnRandom].isMine());
 			((Cell_Impl) cells[rowRandom][columnRandom]).addMine();
 		}
-		log.info("Insert Mines");
 	}
 	
 	private void insertValuesMinesAround(Cell[][] cells) {
 		for(int i = 0; i < cells.length; i++) 
 			for(int j = 0; j < cells[i].length; j++)
 				countMinesAround(cells, i, j);
-		log.info("insert Values Mines Around");
 	}
 	
 	private void countMinesAround(Cell[][] cells, int externalIndex, int innerIndex) {	
@@ -87,7 +81,6 @@ public class BoardBuilder {
 		if( this.winnerListener == null || this.loserListener == null ) {
 			throw new MinesWeeperException("WinnerListener or LoserListener not exists");
 		}
-		log.info("check Events");
 	}
 	
 	private void insertHandleError(Board board) {
@@ -97,13 +90,11 @@ public class BoardBuilder {
 			board.setHandleMarkerCellError(this.markerCellError);
 		if(this.visitedCellError != null)
 			board.setHandleVisitedCellError(this.visitedCellError);
-		log.info("insert Handle Error");
 	}
 	
 	private void insertObserver(Board board) {
 		if(this.boardObserver != null)
 			board.setObserver(boardObserver);
-		log.info("insert Observer");
 	}
 	
 	public BoardBuilder setHandleInvalidCellError(InvalidCellError invalidCellError) {

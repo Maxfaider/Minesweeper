@@ -1,7 +1,5 @@
 package io.amecodelabs.Minesweeper.game;
 
-import java.util.logging.Logger;
-
 import io.amecodelabs.Minesweeper.game.error.InvalidCellError;
 import io.amecodelabs.Minesweeper.game.error.MarkerCellError;
 import io.amecodelabs.Minesweeper.game.error.VisitedCellError;
@@ -9,7 +7,6 @@ import io.amecodelabs.Minesweeper.game.events.LoserListener;
 import io.amecodelabs.Minesweeper.game.events.WinnerListener;
 
 public class Board {
-	private Logger log = Logger.getLogger(this.getClass().getName());
 	private final Cell[][] cells;
 	private int num_cells_visited;
 	private WinnerListener winnerListener;
@@ -37,20 +34,24 @@ public class Board {
 		if(visitedCellError(row, column))
 			return;
 		this.cells[row][column].marker();
+		changedStateBoard(this.cells[row][column]);
 	}
 	
-	public void unMarkCell(int row, int column) {
+	public void unmarkCell(int row, int column) {
 		if(invalidCell(row, column))
 			return;
 		if(visitedCellError(row, column))
 			return;
 		this.cells[row][column].unmarker();
+		changedStateBoard(this.cells[row][column]);
 	}
 	
 	public void play(int row, int column) {
 		if(invalidCell(row, column))
 			return;
 		if(visitedCellError(row, column))
+			return;
+		if(markerCellError(row, column))
 			return;
 		if(this.cells[row][column].isMine()) { 
 			this.loserListener.accept(this); 
@@ -62,7 +63,6 @@ public class Board {
 		} else  {
 			uncoverCells(row, column);
 		}
-		
 	}
 	
 	private void visitedCell(Cell cell) {
@@ -81,7 +81,6 @@ public class Board {
 	}
 	
 	private void uncoverCell(Cell cell) {
-		//System.out.println(cell.getPosition().getRow() + " a "+ cell.getPosition().getColumn());
 		if(cell.isVisited() || cell.isMine() || cell.isMarker())
 			return;
 		if(cell.nroMinesAround() > 0) {
@@ -91,8 +90,12 @@ public class Board {
 		}	
 	}
 	
+	private void changedStateBoard(Cell cell) {
+		this.boardObserver.onBoardValueChanged(this, cell);
+	}
+	
 	private boolean invalidCell(int row, int column) {
-		if( (row<0 && row>=this.boardDetails.getRowsTotal()) || (column<0 && column>=this.boardDetails.getColumnsTotal()) ) {
+		if( (row<0 || row>=this.boardDetails.getRowsTotal()) || (column<0 || column>=this.boardDetails.getColumnsTotal()) ) {
 			this.invalidCellError.accept(
 					new MinesWeeperException(InvalidCellError.code, "Row or Column Invalid", row + " | " + column)
 			);
@@ -104,7 +107,7 @@ public class Board {
 	private boolean markerCellError(int row, int column) {
 		if( this.cells[row][column].isMarker() ) {
 			this.markerCellError.accept(
-					new MinesWeeperException(MarkerCellError.code, "Cell is already marked")
+					new MinesWeeperException(MarkerCellError.code, "Cell is marked")
 			);
 			return true;
 		}
