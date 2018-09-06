@@ -6,6 +6,10 @@ public class MinesWeeperException extends Exception {
 	private String errorMotive;
 	private int code;
 	
+	public MinesWeeperException(String message) {
+		super(message);
+	}
+	
 	public MinesWeeperException(int code, String message, String errorMotive) {
 		super(message);
 		this.code = code;
