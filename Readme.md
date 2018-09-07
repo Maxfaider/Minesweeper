@@ -56,8 +56,10 @@ Jugada: <fila> <columna> <opción: U | M | D>
 ```
 
 ### controls
-> n n U -> uncover
-> n n M -> marker
-> n n D -> unmarker
-> 0 -> exit
+```console
+n n U -> uncover
+n n M -> marker
+n n D -> unmarker
+0 -> exit
+```
 
