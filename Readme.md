@@ -3,11 +3,15 @@
 ## How use
 
 ### Direct
-> java -jar dist/Minesweeper-1.0.0.jar
+```console
+java -jar dist/Minesweeper-1.0.0.jar
+```
 
 ### Maven
-> mvn package
-> java -jar target/Minesweeper-1.0.0.jar
+```console
+mvn package
+java -jar target/Minesweeper-1.0.0.jar
+```
 
 ### compiled JDK 10
 
